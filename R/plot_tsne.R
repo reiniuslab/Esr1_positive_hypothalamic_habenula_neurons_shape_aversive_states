@@ -1,0 +1,15 @@
+suppressMessages(source('R/load_data_scran.R'))
+
+p.tsne.batch <- plotTSNE(sce.filt, colour_by="Batch", point_size=2) + labs(x="t-SNE1",y="t-SNE2") + theme(legend.position = "top") + guides(fill=guide_legend(nrow=1))
+p.tsne.ephys <- plotTSNE(sce.filt, colour_by="Ephys_Category", point_size=2) + labs(x="t-SNE1",y="t-SNE2") + theme(legend.position = "top") + guides(fill=guide_legend(nrow=1))
+p.tsne.clust <- plotTSNE(sce.filt, colour_by="Cluster", point_size=2) + labs(x="t-SNE1",y="t-SNE2") + theme(legend.position = "top") + guides(fill=guide_legend(nrow=1))
+p.tsne.x <- plotTSNE(sce.filt, colour_by="x_ML", point_size=2) + labs(x="t-SNE1",y="t-SNE2") + theme(legend.position = "top") + guides(fill=guide_colorbar(title="Medial-Lateral"))# + scale_fill_distiller(palette="Spectral")
+p.tsne.y <- plotTSNE(sce.filt, colour_by="y_DV", point_size=2) + labs(x="t-SNE1",y="t-SNE2") + theme(legend.position = "top") + guides(fill=guide_colorbar(title="Dorsal-Ventral"))# + scale_fill_distiller(palette="Spectral")
+p.tsne.z <- plotTSNE(sce.filt, colour_by="z_AP", point_size=2) + labs(x="t-SNE1",y="t-SNE2") + theme(legend.position = "top") + guides(fill=guide_colorbar(title="Anterior-Posterior"))# + scale_fill_distiller(palette="Spectral")
+
+ggsave("plots/tsne_batch.pdf",width = 6,height = 6, p.tsne.batch)
+ggsave("plots/tsne_ephys.pdf",width = 6,height = 6, p.tsne.ephys)
+ggsave("plots/tsne_cluster.pdf",width = 6,height = 6, p.tsne.clust)
+ggsave("plots/tsne_xyz_mediallateral.pdf",width = 6,height = 6, p.tsne.x)
+ggsave("plots/tsne_xyz_dorsalventral.pdf",width = 6,height = 6, p.tsne.y)
+ggsave("plots/tsne_xyz_anteriorposterior.pdf",width = 6,height = 6, p.tsne.z)
