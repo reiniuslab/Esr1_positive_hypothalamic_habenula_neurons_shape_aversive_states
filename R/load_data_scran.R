@@ -4,6 +4,9 @@ library(data.table)
 library(ggplot2)
 library(magrittr) # enables %<>% instead of x <- fun(x)
 
+# t10 palette for plotting
+pal.t10 <- c("#729ECE", "#FF9E4A", "#67BF5C", "#ED665D", "#AD8BC9", "#A8786E", "#ED97CA", "#A2A2A2", "#CDCC5D", "#6DCCDA")
+
 t2g <- fread("gencode.vM22.metadata.MGI.gz",header=F, stringsAsFactors = F) # gencode annotations
 
 fls <- list.files("quant",recursive = T,pattern = "quant.sf$",full.names = T)
@@ -21,6 +24,7 @@ library(igraph)
 library(scater)
 library(scran)
 sce <- SingleCellExperiment(assays=list(counts=txi$counts,tpm=txi$abundance),colData=meta)
+sce$Ephys_Category <- factor(sce$Ephys_Category)
 
 # identify outliers based on qc metrics
 is.expr <- calcAverage(sce)>=1
@@ -52,6 +56,8 @@ assays(sce.filt)[["scaled_tpm"]] <- t(apply(assays(sce.filt)[["tpm"]],1,scale))
 # run dimensionality reduction
 # set.seed(53) # for UMAP reproducibility
 sce.filt %<>% runUMAP(feature_set = head(hvgs,500))
+# set.seed(33) # for t-SNE reproducibility
+sce.filt %<>% runTSNE(feature_set = head(hvgs,500))
 
 # identify clusters
 sce.filt$Cluster <- quickCluster(sce.filt,use.ranks=T,min.size=ncol(sce.filt)*0.1,subset.row=head(hvgs,500),graph.fun=cluster_louvain)
